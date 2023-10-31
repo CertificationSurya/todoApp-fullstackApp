@@ -6,13 +6,16 @@ import { Button, Alert } from "react-bootstrap"
 import NavBar from "./components/Navbar"
 import Todos from "./components/Todos"
 import './App.css'
+import { useAppSelector } from "./app/hooks"
+import Login from "./components/Login"
+import CreateTodo from "./components/CreateTodo"
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const { isLoggedIn } = useAppSelector(state => state.todo)
 
   return (
     <Router>
-      <NavBar isLoggedIn={isLoggedIn} />
+      <NavBar/>
       <Routes>
         <Route path="/"
           element={isLoggedIn ?
@@ -24,6 +27,10 @@ const App = () => {
               </Alert>
               <Link to={"/login"} className="px-4 py-2 bg-primary text-white text-decoration-none rounded-3" > Go to Login </Link></div>
           } />
+
+          <Route path="/login" element={<Login />} />
+          <Route path="/create" element={<CreateTodo />} />
+
       </Routes>
 
     </Router>

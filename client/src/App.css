@@ -5,3 +5,16 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.position-sideways{
+  position: relative;
+}
+.pointer {
+  cursor: pointer;
+}
+.position-sideways i {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 1rem;
+}
