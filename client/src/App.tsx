@@ -9,6 +9,7 @@ import './App.css'
 import { useAppSelector } from "./app/hooks"
 import Login from "./components/Login"
 import CreateTodo from "./components/CreateTodo"
+import Todo from "./components/sub-components/Todo"
 
 const App = () => {
   const { isLoggedIn } = useAppSelector(state => state.todo)
@@ -30,6 +31,7 @@ const App = () => {
 
           <Route path="/login" element={<Login />} />
           <Route path="/create" element={<CreateTodo />} />
+          <Route path="/todo/:id" element={<Todo />} />
 
       </Routes>
 

@@ -18,3 +18,13 @@
   transform: translateY(-50%);
   right: 1rem;
 }
+
+/* styles */
+.todoItem{
+  width: min(500px, 100%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: .75rem;
+}
