@@ -19,7 +19,7 @@ const CreateTodo = () => {
   }
 
   return (
-    <Form className='container' onSubmit={handleSubmit} style={{ width: "min(100%, 600px)" }}>
+    <Form className='center-element | container ' onSubmit={handleSubmit} style={{ width: "min(100%, 600px)" }}>
       <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
         <Form.Label className='lead'>Title</Form.Label>
         <Form.Control type="text" placeholder="Your title here" onChange={(e) => setFormData({ ...formData, title: e.target.value })} />

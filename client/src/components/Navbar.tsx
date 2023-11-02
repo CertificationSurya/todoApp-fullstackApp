@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -9,18 +9,18 @@ import { useAppSelector, useAppDispatch } from "../app/hooks";
 
 
 const NavBar = () => {
-  const { isLoggedIn } = useAppSelector((state)=> state.todo)
+  const { isLoggedIn } = useAppSelector((state) => state.user)
 
 
   // useEffect(()=>{
-    
+
   // },[])
 
   const setColorBasedOnlog = () => {
-    return isLoggedIn ? "text-muted" : "text-secondary"
+    return isLoggedIn ? "text-white" : "white-60"
   }
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" bg="primary" data-bs-theme="dark">
       <Container className="d-flex justify-content-around">
         <Navbar.Brand as={Link} to="/">FeedTodos</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -32,7 +32,7 @@ const NavBar = () => {
             >
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to={"/create"} className={`${setColorBasedOnlog()} `}>Create Todos</Nav.Link>
+            <Nav.Link as={Link} to={"/create"} className={`${setColorBasedOnlog()} ${!isLoggedIn? "disable-nav" : ''}`} disabled={!isLoggedIn}>Create Todos</Nav.Link>
             {isLoggedIn ? <Nav.Link as={Link} to={"/logout"} className={`${setColorBasedOnlog()} `}>Logout</Nav.Link> : ""}
           </Nav>
         </Navbar.Collapse>

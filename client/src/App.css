@@ -6,6 +6,10 @@
   transform: translate(-50%, -50%);
 }
 
+.white-60{
+  color: #ebe9e9;
+}
+
 .position-sideways{
   position: relative;
 }
@@ -22,9 +26,9 @@
 /* styles */
 .todoItem{
   width: min(500px, 100%);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   border-radius: .75rem;
+}
+.disable-nav{
+  text-decoration: line-through 1.5px #09ffa1;
+  cursor: not-allowed;
 }

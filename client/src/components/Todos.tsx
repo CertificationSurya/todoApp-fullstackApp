@@ -7,9 +7,9 @@ const Todos = () => {
   const { todos } = useAppSelector(state => state.todo)
 
   return (
-    <>
+    <div className='container | mt-5'>
       {todos.map(todo => (
-        <Card key={todo.id}>
+        <Card key={todo.id} className='my-2'>
           <Card.Body>
             <Card.Title>{todo.title}</Card.Title>
             <Card.Text>
@@ -22,7 +22,7 @@ const Todos = () => {
         </Card>
       ))
       }
-    </>
+    </div>
   )
 }
 

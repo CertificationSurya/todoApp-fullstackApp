@@ -1,4 +1,4 @@
-import { useState } from "react"
+// import { useState } from "react"
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
 import { Button, Alert } from "react-bootstrap"
 
@@ -10,13 +10,15 @@ import { useAppSelector } from "./app/hooks"
 import Login from "./components/Login"
 import CreateTodo from "./components/CreateTodo"
 import Todo from "./components/sub-components/Todo"
+import Signup from "./components/Signup"
+import Logout from "./components/Logout"
 
 const App = () => {
-  const { isLoggedIn } = useAppSelector(state => state.todo)
+  const { isLoggedIn } = useAppSelector(state => state.user)
 
   return (
     <Router>
-      <NavBar/>
+      <NavBar />
       <Routes>
         <Route path="/"
           element={isLoggedIn ?
@@ -26,12 +28,18 @@ const App = () => {
               <Alert key={"danger"} variant={"primary"} className="border-0 rounded-3">
                 Opps! You aren't logged in
               </Alert>
-              <Link to={"/login"} className="px-4 py-2 bg-primary text-white text-decoration-none rounded-3" > Go to Login </Link></div>
+              <div className="d-flex">
+                <Link to={"/login"} className="px-4 py-2 me-4 bg-primary text-white text-decoration-none rounded-3" > Go to Login </Link>
+                <Link to={"/signup"} className="px-4 py-2 bg-primary text-white text-decoration-none rounded-3" > Go to Sign Up </Link>
+              </div>
+            </div>
           } />
 
-          <Route path="/login" element={<Login />} />
-          <Route path="/create" element={<CreateTodo />} />
-          <Route path="/todo/:id" element={<Todo />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/create" element={<CreateTodo />} />
+        <Route path="/todo/:id" element={<Todo />} />
+        <Route path="/logout" element={<Logout />} />
 
       </Routes>
 
