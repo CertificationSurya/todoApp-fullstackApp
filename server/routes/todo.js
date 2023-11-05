@@ -44,7 +44,7 @@ router.get("/:id", async (req, res) => {
     const doc = await client.query(Get(Ref(Collection(COLLECTION_NAME), id)));
     res
       .status(200)
-      .json({ message: "Successfully Fetched Data", document: createdDoc });
+      .json({ message: "Successfully Fetched Data", document: doc });
   } catch (error) {
     res.status(404).json({ message: "Data Not Found In Our Database" });
   }

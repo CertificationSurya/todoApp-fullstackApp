@@ -1,6 +1,6 @@
 // import { useState } from "react"
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
-import { Button, Alert } from "react-bootstrap"
+import { Alert } from "react-bootstrap"
 
 
 import NavBar from "./components/Navbar"

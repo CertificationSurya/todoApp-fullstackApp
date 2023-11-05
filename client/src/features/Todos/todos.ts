@@ -1,24 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-// setting types
-interface todosTypes {
-  id?: string;
-  title: string;
-  description: string;
-  completed?: boolean;
-}
+// our todo data type
+import { requiredTodosType } from "../../services/todoAPI";
 
 type InitialStateType = {
-  todos: todosTypes[];
-  completedTodos: todosTypes[];
+  todos: requiredTodosType[];
+  completedTodos: requiredTodosType[];
 };
 
 // initial variable
 const initialState: InitialStateType = {
-  todos: [
-    { id: "kdalasd", title: "dd", description: "string", completed: false },
-    { id: "addb", title: "Mow", description: "a lon", completed: false },
-  ],
+  todos: [],
   completedTodos: [],
 };
 
@@ -26,7 +17,7 @@ const todoSlice = createSlice({
   name: "todos",
   initialState,
   reducers: {
-    setTodos: (state, action: PayloadAction<todosTypes[]>) => {
+    setTodos: (state, action: PayloadAction<requiredTodosType[]>) => {
       state.todos = action.payload;
     },
   },

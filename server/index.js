@@ -20,17 +20,5 @@ app.use(express.json())
 app.use("/api/todo", require("./routes/todo"))
 // app.use("/api/auth", require("./routes/auth"))
 
-// getting all documents
-// app.get("/", async (req, res) => {
-//   const doc = await client.query(
-//     Map(
-//         Paginate(Documents(Collection('todos'))),
-//         Lambda('doc', Get(Var("doc")))
-//       )
-//   );
-//   console.log(doc.data);
-
-//   res.send("Very minimal setup");
-// });
 
 app.listen(port, () => console.log("SERVER is running in the port", port));
