@@ -1,22 +1,36 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { useCreateSingleTodoMutation } from '../app/services/todoAPI';
+import { useNavigate } from 'react-router-dom';
 
 // form data type
 type formDataType = {
+  id: string,
   title: string,
   description: string
+  completed: boolean
 }
 
 const CreateTodo = () => {
+  const navigate = useNavigate()
+
   const [formData, setFormData] = useState({} as formDataType)
+  const [createTodo, result] = useCreateSingleTodoMutation()
+
+  const currentLocalDateAndTime = (): string => {
+    return new Date().toLocaleString()
+  }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: axios to server with data
-
+    createTodo({ ...formData, createdAt: currentLocalDateAndTime(), updatedAt: currentLocalDateAndTime(), completed: false })
   }
+
+  useEffect(()=>{
+    if (!result.isUninitialized && !result.isError) navigate("/")
+  },[result])
 
   return (
     <Form className='center-element | container ' onSubmit={handleSubmit} style={{ width: "min(100%, 600px)" }}>
@@ -26,7 +40,7 @@ const CreateTodo = () => {
       </Form.Group>
       <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
         <Form.Label className='lead'>Description about Your Todo</Form.Label>
-        <Form.Control as="textarea" rows={5} onChange={(e) => setFormData({ ...formData, description: e.target.value })} style={{resize: 'none'}}/>
+        <Form.Control as="textarea" rows={5} onChange={(e) => setFormData({ ...formData, description: e.target.value })} style={{ resize: 'none' }} />
       </Form.Group>
       <Button variant="primary" type="submit">
         Submit

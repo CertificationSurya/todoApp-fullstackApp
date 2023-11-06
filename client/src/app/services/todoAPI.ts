@@ -8,7 +8,7 @@ export type RequiredTodoType = {
   title: string;
   description: string;
   completed: boolean;
-  createdAt: Date;
+  createdAt: string;
   updatedAt: string;
 };
 
@@ -46,6 +46,8 @@ interface singleTodoResponseType {
 
 export const todosAPI = createApi({
   reducerPath: "api",
+  refetchOnMountOrArgChange: true,
+  refetchOnReconnect: true,
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
 
   endpoints: (builder) => ({
@@ -61,6 +63,7 @@ export const todosAPI = createApi({
         return todos;
       },
     }),
+
     // Get single Todo
     getSingleTodo: builder.query<RequiredTodoType, string | undefined>({
       query: (id) => `/${id}`,
@@ -72,6 +75,7 @@ export const todosAPI = createApi({
         return todoData;
       },
     }),
+    
     // update single Todo
     updateSingleTodo: builder.mutation<singleTodoResponseType, RequiredTodoType>({
       query: (todo: RequiredTodoType) => ({
@@ -80,6 +84,23 @@ export const todosAPI = createApi({
         body: todo,
       }),
     }),
+
+    // create single Todo
+    createSingleTodo: builder.mutation<singleTodoResponseType, RequiredTodoType>({
+      query: (newTodo: RequiredTodoType) => ({
+        url: "/add-todo",
+        method: "POST",
+        body: newTodo
+      }),
+    }),
+
+    // delete single Todo
+    deleteSingleTodo: builder.mutation<singleTodoResponseType, string>({
+      query: (id: string) => ({
+        url: `/${id}`,
+        method: "DELETE",
+      }),
+    })
   }),
 });
 
@@ -87,4 +108,6 @@ export const {
   useGetAllTodosQuery,
   useGetSingleTodoQuery,
   useUpdateSingleTodoMutation,
+  useCreateSingleTodoMutation,
+  useDeleteSingleTodoMutation
 } = todosAPI;

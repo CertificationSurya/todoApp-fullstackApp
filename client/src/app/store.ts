@@ -3,7 +3,8 @@ import todoReducer from "../features/Todos/todos"
 import userReducer from "../features/Users/users"
 
 // API import RTK-Query
-import { todosAPI } from "../services/todoAPI";
+import { todosAPI } from "./services/todoAPI";
+import { setupListeners } from "@reduxjs/toolkit/query";
 
 const store = configureStore({
     reducer: {
@@ -13,6 +14,8 @@ const store = configureStore({
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(todosAPI.middleware)
 })
+
+setupListeners(store.dispatch)
 
 export default store;
 

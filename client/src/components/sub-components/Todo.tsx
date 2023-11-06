@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 
 import { Card, Button } from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom'
-import { RequiredTodoType, useGetSingleTodoQuery, useUpdateSingleTodoMutation } from '../../services/todoAPI'
+import { RequiredTodoType, useGetSingleTodoQuery, useUpdateSingleTodoMutation } from '../../app/services/todoAPI'
 
 // Loader and Toaster
 import Loader from '../Loader/Loader'
@@ -13,10 +13,10 @@ import 'react-toastify/ReactToastify.css'
 const Todo = () => {
     const { id } = useParams();
     const [singleTodo, setSingleTodo] = useState({} as RequiredTodoType)
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
     // Get Data of single TODO
-    const { data: todo, error, isLoading } = useGetSingleTodoQuery(id)
+    const { data: todo, error, isLoading } = useGetSingleTodoQuery(id, {refetchOnMountOrArgChange: true})
     // update single Todo
     const [updatePost, result] = useUpdateSingleTodoMutation()
 
@@ -26,7 +26,7 @@ const Todo = () => {
 
     const saveToDB = () => {
         // sent updated data
-        updatePost({...singleTodo, updatedAt: new Date().toLocaleString()})
+        updatePost({ ...singleTodo, updatedAt: new Date().toLocaleString() })
     }
 
     // save response to state
@@ -44,10 +44,13 @@ const Todo = () => {
         });
     }, [todo, error])
 
-    useEffect(()=>{
-        if (!result.isUninitialized && !result.isError){
-            navigate("/")
-        }
+    useEffect(() => {
+        // refetch()
+        console.log(isLoading)
+        // if (!result.isUninitialized && !result.isError) {
+        //     navigate("/")
+        // }
+
     }, [result])
 
     return (
