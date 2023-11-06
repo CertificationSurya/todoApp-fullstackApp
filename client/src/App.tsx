@@ -2,11 +2,12 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
 import { Alert } from "react-bootstrap"
 
+import { useAppSelector } from "./app/hooks"
+import './App.css'
 
+// Components
 import NavBar from "./components/Navbar"
 import Todos from "./components/Todos"
-import './App.css'
-import { useAppSelector } from "./app/hooks"
 import Login from "./components/Login"
 import CreateTodo from "./components/CreateTodo"
 import Todo from "./components/sub-components/Todo"
