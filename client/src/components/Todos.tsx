@@ -28,8 +28,8 @@ const Todos = () => {
   // Delete a todo
   const [deleteTodo, result] = useDeleteSingleTodoMutation()
 
-  const handleDelete = (id: string) => {
-    deleteTodo(id)
+  const handleDelete = async(id: string) => {
+    await deleteTodo(id)
     refetch()
   }
 

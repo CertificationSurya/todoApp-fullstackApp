@@ -2,12 +2,17 @@ import { useState, useRef } from 'react'
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { useCreateUserMutation } from '../app/services/authAPI';
+
+// Toaster
+// import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/ReactToastify.css'
 
 // form data type
-type formDataType = {
+export type formDataType = {
     email: string,
     password: string
-    confirmPassword: string
+    confirmPassword?: string
 }
 
 const Signup = () => {
@@ -15,6 +20,9 @@ const Signup = () => {
     const passwordRef = useRef<HTMLInputElement>(null)
     const confirmPasswordRef = useRef<HTMLInputElement>(null)
     const [showPassword, setShowPassword] = useState(false)
+
+    // create user
+    const [createUser, result] = useCreateUserMutation()
 
     const handleShowPassword = () => {
         if (passwordRef.current && confirmPasswordRef.current) {
@@ -34,10 +42,15 @@ const Signup = () => {
     }
 
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // TODO: axios to server with data
+        await createUser(formData)
+    }
 
+    // adding authToken to cookies for authentication
+    if (!result.isUninitialized && result.isSuccess && !result.isLoading) {
+        const { message, authToken } = result.data
+        console.log(message, authToken)
     }
 
 

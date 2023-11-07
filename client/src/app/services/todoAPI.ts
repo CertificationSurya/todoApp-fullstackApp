@@ -40,10 +40,6 @@ interface singleTodoResponseType {
   document: responseType;
 }
 
-// export type FetchBaseQueryError  = {
-//   message: string;
-// };
-
 export const todosAPI = createApi({
   reducerPath: "api",
   refetchOnMountOrArgChange: true,

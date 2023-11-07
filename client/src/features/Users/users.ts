@@ -9,7 +9,7 @@ type InitialStateType = {
 
 // initial variable
 const initialState: InitialStateType = {
-  isLoggedIn: true,
+  isLoggedIn: false,
   userMail: '',
   password: ''
 };
