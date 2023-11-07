@@ -6,8 +6,9 @@ const client = require("../DB/db");
 const { Create, Collection } = require("faunadb").query;
 
 // JWT & secret
-const jwt = require("jsonwebtoken")
-const JWT_SECRET = process.env.JWT_SECRET
+const jwt = require("jsonwebtoken");
+const fetchUser = require("../middleware/fetchuser");
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Create a user
 router.post("/create-user", async (req, res) => {
@@ -18,19 +19,21 @@ router.post("/create-user", async (req, res) => {
     const createdUser = await client.query(
       Create(Collection("users"), { data: { email, password: hashedPassword } })
     );
-
     // signing JWT token
     const data = {
-        user: {
-            id: createdUser.ref.id
-        }
-    }
-    const authToken = jwt.sign(data, JWT_SECRET)
+      user: {
+        id: createdUser.ref.id,
+      },
+    };
+    const authToken = jwt.sign(data, JWT_SECRET);
+    // token in cookie
+    res.cookie("token", authToken);
 
     // Sending a JSON response with the user data
-    res.status(200).json({
+    return res.status(200).json({
       message: "Successfully Created A New User",
-      authToken
+      email,
+      token: authToken,
     });
   } catch (error) {
     console.log(error);
@@ -42,8 +45,21 @@ router.post("/create-user", async (req, res) => {
   }
 });
 
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+
+    // console.log(req.headers.cookie)
+    // try{
+    //     jwt.sign(req.cookies.token)
+    // }
+
+  res.json({token: req.cookies.token})
 });
+
+// for getting user 
+router.post("/get-user", fetchUser , async(req, res) => {
+    // my user ref_id from server
+    // const userId = req.user.id // how? look at fetchUser
+})
 
 module.exports = router;
