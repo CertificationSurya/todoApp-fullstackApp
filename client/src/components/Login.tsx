@@ -3,6 +3,7 @@ import { useRef, useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom';
+import { useLoginUserMutation } from '../app/services/authAPI';
 
 // form data type
 type formDataType = {
@@ -10,11 +11,13 @@ type formDataType = {
     password: string
 }
 
-
 const Login = () => {
     const [formData, setFormData] = useState({} as formDataType)
     const passwordRef = useRef<HTMLInputElement>(null)
     const [showPassword, setShowPassword] = useState(false)
+
+    // RTK-query
+    const [loginUser, result] = useLoginUserMutation()
 
     const handleShowPassword = () => {
         if (passwordRef.current) {
@@ -31,10 +34,14 @@ const Login = () => {
         }
     }
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // TODO: axios to server with data
 
+        await loginUser(formData)
+    }
+
+    if (!result.isUninitialized && result.isSuccess){
+        console.log("Boopoti Bapitti Boom!")
     }
 
     return (

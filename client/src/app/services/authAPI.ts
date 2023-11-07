@@ -3,15 +3,27 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const BASE_URL = "http://localhost:8080/api/auth";
 
 interface createResponseType {
-  message: string,
-  authToken: string
+  message: string;
+  token: string;
+  email? : string
 }
 import { formDataType } from "../../components/Signup";
 
 
+// user related APIs
 export const authAPI = createApi({
-  reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  reducerPath: "api1",
+  baseQuery: fetchBaseQuery({
+    baseUrl: BASE_URL,
+    credentials: "include", // required for sending cookie
+    prepareHeaders: (headers, {getState}) => {
+      const token = getState().user.token
+      if (token){
+        headers.set("authorization", `Bearer ${token}`)
+      }
+      return headers
+    }
+  }),
 
   endpoints: (builder) => ({
     // Create user req
@@ -21,10 +33,17 @@ export const authAPI = createApi({
         method: "POST",
         body: userData,
       }),
-
     }),
+
+    loginUser: builder.mutation<unknown, formDataType>({
+      query: (userData) => ({
+        url: "/login",
+        method: "POST",
+        body: userData
+      })
+    })
+
   }),
 });
 
-
-export const { useCreateUserMutation } = authAPI
+export const { useCreateUserMutation, useLoginUserMutation } = authAPI;

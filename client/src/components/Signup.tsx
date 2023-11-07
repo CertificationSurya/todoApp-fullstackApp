@@ -1,12 +1,14 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useCreateUserMutation } from '../app/services/authAPI';
+import { useAppDispatch } from '../app/hooks';
+import { setCredentials } from '../features/Users/users';
 
 // Toaster
 // import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/ReactToastify.css'
+// import 'react-toastify/ReactToastify.css'
 
 // form data type
 export type formDataType = {
@@ -21,6 +23,7 @@ const Signup = () => {
     const confirmPasswordRef = useRef<HTMLInputElement>(null)
     const [showPassword, setShowPassword] = useState(false)
 
+    const dispatch = useAppDispatch()
     // create user
     const [createUser, result] = useCreateUserMutation()
 
@@ -47,11 +50,16 @@ const Signup = () => {
         await createUser(formData)
     }
 
-    // adding authToken to cookies for authentication
-    if (!result.isUninitialized && result.isSuccess && !result.isLoading) {
-        const { message, authToken } = result.data
-        console.log(message, authToken)
-    }
+    useEffect(() => {
+        // adding authToken to store
+        if (!result.isUninitialized && result.isSuccess && !result.isLoading) {
+            const { message, token, email } = result.data
+            console.log(message)
+            
+            dispatch(setCredentials({ email, token }))
+        }
+
+    }, [result])
 
 
     return (
