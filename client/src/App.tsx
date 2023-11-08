@@ -1,8 +1,11 @@
-// import { useState } from "react"
+// import { useEffect } from "react"
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
 import { Alert } from "react-bootstrap"
 
+// import { useAppDispatch, useAppSelector } from "./app/hooks"
 import { useAppSelector } from "./app/hooks"
+// import { useGetUserQuery } from "./app/services/authAPI"
+// import { setCredentials, setUserData } from "./features/Users/users"
 import './App.css'
 
 // Components
@@ -16,6 +19,14 @@ import Logout from "./components/Logout"
 
 const App = () => {
   const { isLoggedIn } = useAppSelector(state => state.user)
+  // const dispatch = useAppDispatch()
+  // const { data, error, isLoading } = useGetUserQuery()
+  // console.log(isLoggedIn)
+
+  // useEffect(()=>{
+  //   console.log(data)
+  //   dispatch(setUserData(true))
+  // },[data])
 
   return (
     <Router>

@@ -36,7 +36,6 @@ const userSlice = createSlice({
     setLogout: (state) => {
       state.isLoggedIn = false,
       state.email = null;
-      state.token = null
     }
   }, 
 });
@@ -45,4 +44,4 @@ export default userSlice.reducer;
 export const todoAction = userSlice.actions;
 
 // for authApi.ts as hook only works for react
-export const { setCredentials, setLogout } = userSlice.actions
+export const { setCredentials, setLogout, setUserData } = userSlice.actions

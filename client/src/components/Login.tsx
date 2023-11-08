@@ -1,9 +1,17 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLoginUserMutation } from '../app/services/authAPI';
+
+// Toaster and loader
+
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/ReactToastify.css'
+import Loader from './Loader/Loader';
+import { useAppDispatch } from '../app/hooks';
+import { setUserData } from '../features/Users/users';
 
 // form data type
 type formDataType = {
@@ -16,8 +24,10 @@ const Login = () => {
     const passwordRef = useRef<HTMLInputElement>(null)
     const [showPassword, setShowPassword] = useState(false)
 
+    const navigate = useNavigate()
     // RTK-query
     const [loginUser, result] = useLoginUserMutation()
+    const dispatch = useAppDispatch()
 
     const handleShowPassword = () => {
         if (passwordRef.current) {
@@ -34,48 +44,74 @@ const Login = () => {
         }
     }
 
-    const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         await loginUser(formData)
     }
 
-    if (!result.isUninitialized && result.isSuccess){
-        console.log("Boopoti Bapitti Boom!")
-    }
+    useEffect(() => {
+        // adding authToken to store
+        if (!result.isUninitialized && result.isSuccess && !result.isLoading) {
+            console.log(result)
+            toast.success(result.data.message)
+            dispatch(setUserData(true))
+            navigate('/')
+        }
+        else if (!result.isUninitialized && result.isError) {
+            toast.error(result.error.data.message)
+        }
+    }, [result])
+
+    if (!result.isUninitialized && result.isLoading) return <Loader type='bars' color='blue' />
 
     return (
-        <Form className='container | center-element' onSubmit={handleSubmit} style={{ width: "min(100%, 600px)" }}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
-            </Form.Group>
+        <>
+            <Form className='container | center-element' onSubmit={handleSubmit} style={{ width: "min(100%, 600px)" }}>
+                <h3 className='text-center mb-4 text-decoration-underline fw-bold'>Login</h3>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control type="email" placeholder="Enter email" onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+                </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <div className="position-sideways">
-                    <Form.Control ref={passwordRef} type="password" placeholder="Password" onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
-                    {
-                        showPassword ?
-                            <i className="fa-solid fa-eye-slash pointer" onClick={handleShowPassword} style={{ color: "#00aaff" }}></i>
-                            :
-                            <i className="fa-solid fa-eye pointer" onClick={handleShowPassword} style={{ color: "#0a89ff" }}></i>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <div className="position-sideways">
+                        <Form.Control ref={passwordRef} type="password" placeholder="Password" onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+                        {
+                            showPassword ?
+                                <i className="fa-solid fa-eye-slash pointer" onClick={handleShowPassword} style={{ color: "#00aaff" }}></i>
+                                :
+                                <i className="fa-solid fa-eye pointer" onClick={handleShowPassword} style={{ color: "#0a89ff" }}></i>
 
-                    }
-                </div>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" label="Remember Me" />
-            </Form.Group>
-            <Button variant="primary" type="submit" className='me-4'>
-                Submit
-            </Button>
-            <Link to={"/signup"}>
-                <Button variant="primary" type="submit">
-                    No Account? go to SignUp
+                        }
+                    </div>
+                </Form.Group>
+                
+                <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                    <Form.Check type="checkbox" label="Remember Me" />
+                </Form.Group>
+                <Button variant="primary" type="submit" className='me-4'>
+                    Submit
                 </Button>
-            </Link>
-        </Form>
+                <Link to={"/signup"}>
+                    <Button variant="primary" type="submit">
+                        No Account? go to SignUp
+                    </Button>
+                </Link>
+            </Form>
+            <ToastContainer
+                position="bottom-center"
+                autoClose={1500}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+        </>
     );
 }
 

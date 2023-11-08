@@ -23,9 +23,10 @@ const CreateTodo = () => {
     return new Date().toLocaleString()
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createTodo({ ...formData, createdAt: currentLocalDateAndTime(), updatedAt: currentLocalDateAndTime(), completed: false })
+    const createdTodo = await createTodo({ ...formData, createdAt: currentLocalDateAndTime(), updatedAt: currentLocalDateAndTime(), completed: false })
+    console.log(createdTodo)
   }
 
   useEffect(()=>{

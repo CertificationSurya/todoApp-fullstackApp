@@ -16,7 +16,8 @@ const Todos = () => {
   const dispatch = useAppDispatch();
 
   // fetching data fron query 
-  const { data: todoList, error, isLoading, refetch } = useGetAllTodosQuery(undefined, { refetchOnMountOrArgChange: true })
+  // const { data: todoList, error, isLoading, refetch } = useGetAllTodosQuery(undefined, { refetchOnMountOrArgChange: true })
+  const { data: todoList, error, isLoading, refetch } = useGetAllTodosQuery()
   // console.log(todoList, error)
   useEffect(() => {
     if (todoList) {
