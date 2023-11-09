@@ -23,7 +23,8 @@ const {
 const COLLECTION_NAME = "todos";
 
 // Fetch All TODOS
-router.get("/get-todos", async (req, res) => {
+router.get("/get-todos", fetchUser, async (req, res) => {
+  
   try {
     const doc = await client.query(
       Map(
@@ -38,7 +39,7 @@ router.get("/get-todos", async (req, res) => {
 });
 
 // Fetch Single Document / Todo
-router.get("/:id", async (req, res) => {
+router.get("/:id", fetchUser, async (req, res) => {
   const { id } = req.params;
   try {
     const doc = await client.query(Get(Ref(Collection(COLLECTION_NAME), id)));
@@ -51,7 +52,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Create document / Todo
-router.post("/add-todo", async (req, res) => {
+router.post("/add-todo", fetchUser, async (req, res) => {
   const data = req.body;
   try {
     const createdDoc = await client.query(
@@ -67,7 +68,7 @@ router.post("/add-todo", async (req, res) => {
 });
 
 // Update Single Document / Todo
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", fetchUser, async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   try {
@@ -83,7 +84,7 @@ router.patch("/:id", async (req, res) => {
 });
 
 // Delete Single Documents / Todo
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", fetchUser, async (req, res) => {
   const { id } = req.params;
   try {
     const deletedDoc = await client.query(

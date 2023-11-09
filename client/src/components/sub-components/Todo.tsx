@@ -44,14 +44,13 @@ const Todo = () => {
         });
     }, [todo, error])
 
-    useEffect(() => {
+    // useEffect(() => {
         // refetch()
-        console.log(isLoading)
+        // console.log(isLoading)
         // if (!result.isUninitialized && !result.isError) {
         //     navigate("/")
         // }
-
-    }, [result])
+    // }, [result])
 
     return (
         <>{todo ?

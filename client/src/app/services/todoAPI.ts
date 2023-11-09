@@ -44,7 +44,7 @@ export const todosAPI = createApi({
   reducerPath: "api",
   refetchOnMountOrArgChange: true,
   refetchOnReconnect: true,
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: "include" }),
 
   endpoints: (builder) => ({
     // Get all todos from DB
@@ -71,9 +71,12 @@ export const todosAPI = createApi({
         return todoData;
       },
     }),
-    
+
     // update single Todo
-    updateSingleTodo: builder.mutation<singleTodoResponseType, RequiredTodoType>({
+    updateSingleTodo: builder.mutation<
+      singleTodoResponseType,
+      RequiredTodoType
+    >({
       query: (todo: RequiredTodoType) => ({
         url: todo.id,
         method: "PATCH",
@@ -82,11 +85,14 @@ export const todosAPI = createApi({
     }),
 
     // create single Todo
-    createSingleTodo: builder.mutation<singleTodoResponseType, RequiredTodoType>({
+    createSingleTodo: builder.mutation<
+      singleTodoResponseType,
+      RequiredTodoType
+    >({
       query: (newTodo: RequiredTodoType) => ({
         url: "/add-todo",
         method: "POST",
-        body: newTodo
+        body: newTodo,
       }),
     }),
 
@@ -96,7 +102,7 @@ export const todosAPI = createApi({
         url: `/${id}`,
         method: "DELETE",
       }),
-    })
+    }),
   }),
 });
 
@@ -105,5 +111,5 @@ export const {
   useGetSingleTodoQuery,
   useUpdateSingleTodoMutation,
   useCreateSingleTodoMutation,
-  useDeleteSingleTodoMutation
+  useDeleteSingleTodoMutation,
 } = todosAPI;

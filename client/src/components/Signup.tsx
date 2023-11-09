@@ -19,8 +19,15 @@ export type formDataType = {
     confirmPassword?: string
 }
 
+const INITIAL_FORM_DATA = {
+    email: '',
+    password: '',
+    confirmPassword: ''
+}
+
 const Signup = () => {
-    const [formData, setFormData] = useState({} as formDataType)
+    const [formData, setFormData] = useState<formDataType>(INITIAL_FORM_DATA)
+
     const passwordRef = useRef<HTMLInputElement>(null)
     const confirmPasswordRef = useRef<HTMLInputElement>(null)
     const [showPassword, setShowPassword] = useState(false)
@@ -29,6 +36,13 @@ const Signup = () => {
     const dispatch = useAppDispatch()
     // create user
     const [createUser, result] = useCreateUserMutation()
+
+    // utility function
+    const handleClientErrorAndClear = (toastMsg: string) => {
+        setFormData(INITIAL_FORM_DATA)
+        return toast.error(toastMsg)
+    }
+    
 
     const handleShowPassword = () => {
         if (passwordRef.current && confirmPasswordRef.current) {
@@ -47,9 +61,16 @@ const Signup = () => {
         }
     }
 
+    
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        // client side validation
+        const { password, confirmPassword } = formData
+        if (password.length < 8) return handleClientErrorAndClear("Password must be atleast 8 characters")
+        else if (confirmPassword && confirmPassword.length < 8) return handleClientErrorAndClear("Confirm password must be atleast 8 characters")
+        else if (password !== confirmPassword) return handleClientErrorAndClear("Password and confirm password didn't match ")
+
         await createUser(formData)
     }
 
@@ -78,13 +99,13 @@ const Signup = () => {
                 <h3 className='text-center mb-4 text-decoration-underline fw-bold'>SignUp</h3>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+                    <Form.Control type="email" placeholder="Enter email" required onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
                     <div className="position-sideways">
-                        <Form.Control ref={passwordRef} type="password" placeholder="Password" onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+                        <Form.Control ref={passwordRef} required type="password" placeholder="Password" onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
                         {
                             showPassword ?
                                 <i className="fa-solid fa-eye-slash pointer" onClick={handleShowPassword} style={{ color: "#00aaff" }}></i>
@@ -98,7 +119,7 @@ const Signup = () => {
                 <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
                     <Form.Label>Confirm Password</Form.Label>
                     <div className="position-sideways">
-                        <Form.Control ref={confirmPasswordRef} type="password" placeholder="Confirm Password" onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })} />
+                        <Form.Control ref={confirmPasswordRef} required type="password" placeholder="Confirm Password" onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })} />
                         {
                             showPassword ?
                                 <i className="fa-solid fa-eye-slash pointer" onClick={handleShowPassword} style={{ color: "#00aaff" }}></i>
@@ -108,7 +129,7 @@ const Signup = () => {
                         }
                     </div>
                 </Form.Group>
-                
+
                 <Button variant="primary" type="submit" className='me-4'>
                     Submit
                 </Button>

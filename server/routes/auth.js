@@ -23,6 +23,7 @@ const getUserByEmailFunction = (email) => {
 // JWT & secret
 const jwt = require("jsonwebtoken");
 const fetchUser = require("../middleware/fetchuser");
+const ALLOWED_URL = require("..");
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Create a user
@@ -73,10 +74,12 @@ router.post("/login", async (req, res) => {
 
     if (passwordMatch) {
       // signing JWT token
-      const data = { user: { id: loggedInUser.ref.id} };
-      const authToken = jwt.sign(data, JWT_SECRET);
+      const data = { user: { id: loggedInUser.ref.id } };
+      const authToken = jwt.sign(data, JWT_SECRET, {expiresIn: '7d'});
       // token in cookie
-      res.cookie("token", authToken);
+      res.cookie('token', authToken, { path: '/api', httpOnly: true, sameSite: 'None', secure: true });
+
+
     } else return res.status(403).json({ message: "Invalid Credentials" });
   } catch (err) {
     console.log(err);

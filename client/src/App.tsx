@@ -1,12 +1,7 @@
-// import { useEffect } from "react"
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
-import { Alert } from "react-bootstrap"
-
-// import { useAppDispatch, useAppSelector } from "./app/hooks"
-import { useAppSelector } from "./app/hooks"
-// import { useGetUserQuery } from "./app/services/authAPI"
-// import { setCredentials, setUserData } from "./features/Users/users"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { useAppDispatch, useAppSelector } from "./app/hooks"
 import './App.css'
+import { useEffect } from "react"
 
 // Components
 import NavBar from "./components/Navbar"
@@ -16,35 +11,32 @@ import CreateTodo from "./components/CreateTodo"
 import Todo from "./components/sub-components/Todo"
 import Signup from "./components/Signup"
 import Logout from "./components/Logout"
+import NotLoggedIn from "./components/sub-components/NotLoggedIn"
+import { useGetUserQuery } from "./app/services/authAPI"
+import { setUserData } from "./features/Users/users"
+
 
 const App = () => {
   const { isLoggedIn } = useAppSelector(state => state.user)
-  // const dispatch = useAppDispatch()
-  // const { data, error, isLoading } = useGetUserQuery()
-  // console.log(isLoggedIn)
+  const dispatch = useAppDispatch()
+  const { data, error, isLoading } = useGetUserQuery()
 
-  // useEffect(()=>{
-  //   console.log(data)
-  //   dispatch(setUserData(true))
-  // },[data])
+  useEffect(() => {
+    if (data && !isLoading) {
+      dispatch(setUserData(true))
+    }
+  },[data, error])
+
 
   return (
     <Router>
       <NavBar />
       <Routes>
         <Route path="/"
-          element={isLoggedIn ?
+          element={(isLoading || isLoggedIn) ?
             <Todos />
             :
-            <div className="center-element d-flex flex-column align-items-center border-1">
-              <Alert key={"danger"} variant={"primary"} className="border-0 rounded-3">
-                Opps! You aren't logged in
-              </Alert>
-              <div className="d-flex">
-                <Link to={"/login"} className="px-4 py-2 me-4 bg-primary text-white text-decoration-none rounded-3" > Go to Login </Link>
-                <Link to={"/signup"} className="px-4 py-2 bg-primary text-white text-decoration-none rounded-3" > Go to Sign Up </Link>
-              </div>
-            </div>
+            <NotLoggedIn errorMsg={error?.data.message}/>
           } />
 
         <Route path="/login" element={<Login />} />
@@ -52,9 +44,8 @@ const App = () => {
         <Route path="/create" element={<CreateTodo />} />
         <Route path="/todo/:id" element={<Todo />} />
         <Route path="/logout" element={<Logout />} />
-
+       
       </Routes>
-
     </Router>
   )
 }

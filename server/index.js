@@ -23,3 +23,7 @@ app.use("/api/todo", require("./routes/todo"));
 app.use("/api/auth", require("./routes/auth"));
 
 app.listen(port, () => console.log("SERVER is running in the port", port));
+
+
+
+module.exports = ALLOWED_URL

@@ -19,8 +19,10 @@ type formDataType = {
     password: string
 }
 
+const INITIAL_FORM_DATA = { email: '', password: ''}
+
 const Login = () => {
-    const [formData, setFormData] = useState({} as formDataType)
+    const [formData, setFormData] = useState <formDataType>(INITIAL_FORM_DATA)
     const passwordRef = useRef<HTMLInputElement>(null)
     const [showPassword, setShowPassword] = useState(false)
 
@@ -28,6 +30,12 @@ const Login = () => {
     // RTK-query
     const [loginUser, result] = useLoginUserMutation()
     const dispatch = useAppDispatch()
+
+    // utility function
+    const handleClientErrorAndClear = (toastMsg: string) => {
+        setFormData(INITIAL_FORM_DATA)
+        return toast.error(toastMsg)
+    }
 
     const handleShowPassword = () => {
         if (passwordRef.current) {
@@ -46,6 +54,9 @@ const Login = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const { password } = formData
+        // client side validation
+        if (password.length < 8) return handleClientErrorAndClear("Password must be atleast 8 characters")
         await loginUser(formData)
     }
 
@@ -70,13 +81,13 @@ const Login = () => {
                 <h3 className='text-center mb-4 text-decoration-underline fw-bold'>Login</h3>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+                    <Form.Control type="email" placeholder="Enter email" required onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
                     <div className="position-sideways">
-                        <Form.Control ref={passwordRef} type="password" placeholder="Password" onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+                        <Form.Control ref={passwordRef} type="password" required placeholder="Password" onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
                         {
                             showPassword ?
                                 <i className="fa-solid fa-eye-slash pointer" onClick={handleShowPassword} style={{ color: "#00aaff" }}></i>
@@ -86,7 +97,7 @@ const Login = () => {
                         }
                     </div>
                 </Form.Group>
-                
+
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
                     <Form.Check type="checkbox" label="Remember Me" />
                 </Form.Group>
