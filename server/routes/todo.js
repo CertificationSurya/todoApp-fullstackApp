@@ -15,23 +15,26 @@ const {
   Match,
   Index,
   Lambda,
+  Call,
+  Function: Func,
+  Select,
   Var,
   Documents,
 } = require("faunadb").query;
 
 // const values
 const COLLECTION_NAME = "todos";
+// custom function of function made in FaunaDB
+const getAllTodosByUserId = (userId) => {
+  return Call(Func("getTodosByUserId"), userId);
+};
+
 
 // Fetch All TODOS
 router.get("/get-todos", fetchUser, async (req, res) => {
   
   try {
-    const doc = await client.query(
-      Map(
-        Paginate(Documents(Collection(COLLECTION_NAME))),
-        Lambda("doc", Get(Var("doc")))
-      )
-    );
+    const doc = await client.query( getAllTodosByUserId(req.user.id) );
     res.json(doc.data);
   } catch (error) {
     res.status(500).send("Internal Error Occured");
@@ -56,7 +59,7 @@ router.post("/add-todo", fetchUser, async (req, res) => {
   const data = req.body;
   try {
     const createdDoc = await client.query(
-      Create(Collection("todos"), { data })
+      Create(Collection("todos"), { data: {...data, userId: req.user.id } })
     );
     res.status(200).json({
       message: "Successfully Created A New Todo",
