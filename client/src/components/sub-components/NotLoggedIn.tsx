@@ -4,7 +4,6 @@ import { Link } from "react-router-dom"
 type propType = {
     errorMsg: string
 }
-
 // Toaster
 import { toast, ToastContainer } from 'react-toastify'
 

@@ -4,17 +4,12 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
 
-import { useAppSelector, useAppDispatch } from "../app/hooks";
+import { useAppSelector } from "../app/hooks";
 
 
 
 const NavBar = () => {
   const { isLoggedIn } = useAppSelector((state) => state.user)
-
-
-  // useEffect(()=>{
-
-  // },[])
 
   const setColorBasedOnlog = () => {
     return isLoggedIn ? "text-white" : "white-60"

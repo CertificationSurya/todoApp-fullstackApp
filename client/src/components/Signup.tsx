@@ -39,10 +39,10 @@ const Signup = () => {
 
     // utility function
     const handleClientErrorAndClear = (toastMsg: string) => {
-        setFormData(INITIAL_FORM_DATA)
+        // setFormData(INITIAL_FORM_DATA)
         return toast.error(toastMsg)
     }
-    
+
 
     const handleShowPassword = () => {
         if (passwordRef.current && confirmPasswordRef.current) {
@@ -61,7 +61,7 @@ const Signup = () => {
         }
     }
 
-    
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -87,7 +87,8 @@ const Signup = () => {
         }
         else if (!result.isUninitialized && result.isError) {
             // console.log(result)
-            toast.error(result.error.data.message)
+            const errorMsg = result.error.data.message;
+            toast.error(errorMsg)
         }
     }, [result])
 
@@ -98,20 +99,19 @@ const Signup = () => {
             <Form className='container | center-element' onSubmit={handleSubmit} style={{ width: "min(100%, 600px)" }}>
                 <h3 className='text-center mb-4 text-decoration-underline fw-bold'>SignUp</h3>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" required onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+                    <Form.Label title='Must be google authenticate email address'>Email address</Form.Label>
+                    <Form.Control type="email" placeholder="Enter email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
                     <div className="position-sideways">
-                        <Form.Control ref={passwordRef} required type="password" placeholder="Password" onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+                        <Form.Control ref={passwordRef} required type="password" value={formData.password} placeholder="Password" onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
                         {
                             showPassword ?
                                 <i className="fa-solid fa-eye-slash pointer" onClick={handleShowPassword} style={{ color: "#00aaff" }}></i>
                                 :
                                 <i className="fa-solid fa-eye pointer" onClick={handleShowPassword} style={{ color: "#0a89ff" }}></i>
-
                         }
                     </div>
                 </Form.Group>
@@ -119,7 +119,7 @@ const Signup = () => {
                 <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
                     <Form.Label>Confirm Password</Form.Label>
                     <div className="position-sideways">
-                        <Form.Control ref={confirmPasswordRef} required type="password" placeholder="Confirm Password" onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })} />
+                        <Form.Control value={formData.confirmPassword} ref={confirmPasswordRef} required type="password" placeholder="Confirm Password" onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })} />
                         {
                             showPassword ?
                                 <i className="fa-solid fa-eye-slash pointer" onClick={handleShowPassword} style={{ color: "#00aaff" }}></i>

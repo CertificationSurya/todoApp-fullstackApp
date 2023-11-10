@@ -10,16 +10,8 @@ const {
   Delete,
   Ref,
   Collection,
-  Map,
-  Paginate,
-  Match,
-  Index,
-  Lambda,
   Call,
   Function: Func,
-  Select,
-  Var,
-  Documents,
 } = require("faunadb").query;
 
 // const values

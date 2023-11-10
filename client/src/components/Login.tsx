@@ -63,7 +63,7 @@ const Login = () => {
     useEffect(() => {
         // adding authToken to store
         if (!result.isUninitialized && result.isSuccess && !result.isLoading) {
-            console.log(result)
+            // console.log(result)
             toast.success(result.data.message)
             dispatch(setUserData(true))
             navigate('/')

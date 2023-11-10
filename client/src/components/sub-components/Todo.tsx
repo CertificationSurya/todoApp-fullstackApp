@@ -13,17 +13,15 @@ import 'react-toastify/ReactToastify.css'
 const Todo = () => {
     const { id } = useParams();
     const [singleTodo, setSingleTodo] = useState({} as RequiredTodoType)
-    // const navigate = useNavigate()
 
     // Get Data of single TODO
     const { data: todo, error, isLoading } = useGetSingleTodoQuery(id, {refetchOnMountOrArgChange: true})
     // update single Todo
-    const [updatePost, result] = useUpdateSingleTodoMutation()
+    const [updatePost] = useUpdateSingleTodoMutation()
 
     const toggleTodo = () => {
         setSingleTodo((singleTodo: RequiredTodoType) => ({ ...singleTodo, completed: !singleTodo.completed }))
     }
-
     const saveToDB = () => {
         // sent updated data
         updatePost({ ...singleTodo, updatedAt: new Date().toLocaleString() })
@@ -43,14 +41,6 @@ const Todo = () => {
             theme: "light",
         });
     }, [todo, error])
-
-    // useEffect(() => {
-        // refetch()
-        // console.log(isLoading)
-        // if (!result.isUninitialized && !result.isError) {
-        //     navigate("/")
-        // }
-    // }, [result])
 
     return (
         <>{todo ?

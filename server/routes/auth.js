@@ -2,15 +2,14 @@ const router = require("express").Router();
 const argon2 = require("argon2");
 const client = require("../DB/db");
 
+const emailValidator = require("deep-email-validator")
+
 // FaunaDB APIs
 const {
   Create,
   Collection,
   Call,
   Function: Func,
-  Get,
-  Match,
-  Index,
 } = require("faunadb").query;
 
 // constants
@@ -23,7 +22,6 @@ const getUserByEmailFunction = (email) => {
 // JWT & secret
 const jwt = require("jsonwebtoken");
 const fetchUser = require("../middleware/fetchuser");
-const ALLOWED_URL = require("..");
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Create a user
@@ -31,7 +29,21 @@ router.post("/create-user", async (req, res) => {
   const { email, password } = req.body;
   const hashedPassword = await argon2.hash(password);
 
-  // // check user exist in Database or not
+  // check if email exist of mailbox or not ( gmail ac checker )
+  const validationData = await emailValidator.validate(email)
+  const typoValidation = validationData.validators.typo
+  if (typoValidation.valid === false ) {
+    const errorReason = validationData.validators.regex.reason || typoValidation.reason
+    return res.status(400).json({message: errorReason})
+  }
+  // console.log(email, validationData)
+  const isValidEmail = validationData.valid
+  if (!isValidEmail){
+    return res.status(400).json({message: "Invalid gmail account. Use a valid gmail account"})
+  }
+
+  
+  // check user exist in Database or not
   try {
     const userExistResponse = await client.query(getUserByEmailFunction(email));
     return res.status(422).json({
@@ -39,7 +51,6 @@ router.post("/create-user", async (req, res) => {
     });
   } catch (err) {
     // user didn't exist
-
     try {
       const createdUser = await client.query(
         Create(Collection(COLLECTION_NAME), {
@@ -76,9 +87,10 @@ router.post("/login", async (req, res) => {
       // signing JWT token
       const data = { user: { id: loggedInUser.ref.id } };
       const authToken = jwt.sign(data, JWT_SECRET, {expiresIn: '7d'});
+      // removing token if already present
+      res.clearCookie('token')
       // token in cookie
       res.cookie('token', authToken, { path: '/api', httpOnly: true, sameSite: 'None', secure: true });
-
 
     } else return res.status(403).json({ message: "Invalid Credentials" });
   } catch (err) {

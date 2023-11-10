@@ -17,7 +17,7 @@ import { setUserData } from "./features/Users/users"
 
 
 const App = () => {
-  const { isLoggedIn } = useAppSelector(state => state.user)
+  const { isLoggedIn } : {isLoggedIn: boolean} = useAppSelector(state => state.user)
   const dispatch = useAppDispatch()
   const { data, error, isLoading } = useGetUserQuery()
 
