@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const port = process.env.PORT || 8080;
-const ALLOWED_URL = "http://localhost:3000";
+const ALLOWED_URL = ["https://certi-todo-client.netlify.app"];
 
 app.use(express.json());
 // cors

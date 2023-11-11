@@ -29,19 +29,6 @@ router.post("/create-user", async (req, res) => {
   const { email, password } = req.body;
   const hashedPassword = await argon2.hash(password);
 
-  // check if email exist of mailbox or not ( gmail ac checker )
-  const validationData = await emailValidator.validate(email)
-  const typoValidation = validationData.validators.typo
-  if (typoValidation.valid === false ) {
-    const errorReason = validationData.validators.regex.reason || typoValidation.reason
-    return res.status(400).json({message: errorReason})
-  }
-  // console.log(email, validationData)
-  const isValidEmail = validationData.valid
-  if (!isValidEmail){
-    return res.status(400).json({message: "Invalid gmail account. Use a valid gmail account"})
-  }
-
   
   // check user exist in Database or not
   try {
