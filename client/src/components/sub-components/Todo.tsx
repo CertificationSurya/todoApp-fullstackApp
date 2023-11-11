@@ -30,7 +30,7 @@ const Todo = () => {
     // save response to state
     useEffect(() => {
         if (todo) setSingleTodo(todo)
-        if (error) toast.error(error.data.message, {
+        if (error) toast.error("Error occured", {
             position: "bottom-center",
             autoClose: 1000,
             hideProgressBar: false,
