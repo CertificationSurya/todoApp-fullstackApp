@@ -64,12 +64,12 @@ const Login = () => {
         // adding authToken to store
         if (!result.isUninitialized && result.isSuccess && !result.isLoading) {
             // console.log(result)
-            toast.success(result.data.message)
+            toast.success("You are successfully logged in")
             dispatch(setUserData(true))
             navigate('/')
         }
         else if (!result.isUninitialized && result.isError) {
-            toast.error(result.error.data.message)
+            toast.error("Couldn't login, Invalid credential")
         }
     }, [result])
 

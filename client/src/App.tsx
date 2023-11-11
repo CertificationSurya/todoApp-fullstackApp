@@ -36,7 +36,7 @@ const App = () => {
           element={(isLoading || isLoggedIn) ?
             <Todos />
             :
-            <NotLoggedIn errorMsg={error?.data.message}/>
+            <NotLoggedIn errorMsg={" Error Occured"}/>
           } />
 
         <Route path="/login" element={<Login />} />

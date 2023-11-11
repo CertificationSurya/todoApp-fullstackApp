@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const BASE_URL = "http://localhost:8080/api/todo";
+import { BASE_URL } from "./authAPI";
+
 
 // FaunaDB Response types
 export type RequiredTodoType = {
@@ -44,7 +45,7 @@ export const todosAPI = createApi({
   reducerPath: "api",
   refetchOnMountOrArgChange: true,
   refetchOnReconnect: true,
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: "include" }),
+  baseQuery: fetchBaseQuery({ baseUrl: `${BASE_URL}/todo`, credentials: "include" }),
 
   endpoints: (builder) => ({
     // Get all todos from DB

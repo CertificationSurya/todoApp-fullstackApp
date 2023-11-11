@@ -86,9 +86,9 @@ const Signup = () => {
             }, 2500)
         }
         else if (!result.isUninitialized && result.isError) {
-            // console.log(result)
-            const errorMsg = result.error.data.message;
-            toast.error(errorMsg)
+            console.log(result)
+            // const errorMsg = result.error.data.message;
+            toast.error("Couldn't signup. Gmail account wasn't valid")
         }
     }, [result])
 

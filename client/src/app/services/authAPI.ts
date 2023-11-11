@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const BASE_URL = "http://localhost:8080/api/auth";
+export const BASE_URL = "https://certi-todo-server.onrender.com/api";
 
 interface createResponseType {
   message: string;
@@ -14,14 +14,18 @@ interface getUserResponseType {
   email: string;
 }
 
+type loginUserType = {
+    data: {
+      message: string
+    }
+}
 import { formDataType } from "../../components/Signup";
-
 
 // user related APIs
 export const authAPI = createApi({
   reducerPath: "api1",
   baseQuery: fetchBaseQuery({
-    baseUrl: BASE_URL,
+    baseUrl: `${BASE_URL}/auth`,
     credentials: "include", // required for sending cookie
     // prepareHeaders: (headers, {getState}) => {
     //   const token = getState().user.token
@@ -48,7 +52,7 @@ export const authAPI = createApi({
     }),
 
     // login user
-    loginUser: builder.mutation<unknown, formDataType>({
+    loginUser: builder.mutation<loginUserType, formDataType>({
       query: (userData) => ({
         url: "/login",
         method: "POST",
