@@ -2,7 +2,13 @@ const router = require("express").Router();
 const argon2 = require("argon2");
 const client = require("../DB/db");
 
-const emailValidator = require("deep-email-validator")
+
+// const { VerifaliaRestClient } = require("verifalia")
+const { VerifaliaRestClient } = require("verifalia")
+const verifalia = new VerifaliaRestClient({
+  username: process.env.EMAIL_VALIDATION_API
+})
+
 
 // FaunaDB APIs
 const {
@@ -29,6 +35,10 @@ router.post("/create-user", async (req, res) => {
   const { email, password } = req.body;
   const hashedPassword = await argon2.hash(password);
 
+  // if email really is valid
+  const emailValidationResult = await verifalia.emailValidations.submit(email)
+  const isDeliverable = emailValidationResult.entries[0].classification
+  if (isDeliverable !== "Deliverable") return res.status(400).json({message: "Invalid Email address provided"})
   
   // check user exist in Database or not
   try {
